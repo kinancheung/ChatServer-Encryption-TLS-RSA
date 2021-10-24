@@ -1,0 +1,76 @@
+import sys
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QListWidget, QPushButton, QVBoxLayout, QWidget
+
+import MainActivity
+
+class GroupChatActivity(QWidget):
+
+    def __init__(self, mainWindow, parent=None):
+        super(GroupChatActivity, self).__init__(parent)
+        self.mainWindow = mainWindow
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("Chat")
+        hBox = QHBoxLayout()
+        vBox = QVBoxLayout()
+        vBoxInv = self.createInvDetails()
+
+        chatBox = self.createChatBox()
+        vBox.addLayout(chatBox)
+        sendBox = self.createSendBox()
+        vBox.addLayout(sendBox)
+
+
+        hBox.addLayout(vBox)
+        hBox.addLayout(vBoxInv)
+        self.setLayout(hBox)
+
+    def createInvDetails(self):
+        vBoxInv = QVBoxLayout()
+        memberLabel = QLabel("Members")
+        vBoxInv.addWidget(memberLabel)
+
+        memberList = QListWidget()
+        vBoxInv.addWidget(memberList)
+
+        invBtn = QPushButton("Invite")
+        vBoxInv.addWidget(invBtn)
+
+        return vBoxInv
+
+    def createChatBox(self):
+        infoChatBox = QVBoxLayout()
+        # insert a name here and room number
+        singleLabel = QLabel("Room1 by Alice")
+        singleLabel.font().setPointSize(20)
+        infoChatBox.addWidget(singleLabel)
+
+        chatList = QListWidget()
+        infoChatBox.addWidget(chatList)
+
+        return infoChatBox
+
+    def createSendBox(self):
+        sendBox = QVBoxLayout()
+        detailSendBox = self.createDetailSendBox()
+        sendBox.addLayout(detailSendBox)
+        closeBtn = QPushButton("Close")
+        closeBtn.clicked.connect(self.setCloseButton)
+        sendBox.addWidget(closeBtn)
+        
+        return sendBox
+
+    def createDetailSendBox(self):
+        sendMessageBox = QHBoxLayout()
+        messageBox = QLineEdit()
+        sendMessageBox.addWidget(messageBox)
+
+        sendBtn = QPushButton("Send")
+        sendMessageBox.addWidget(sendBtn)
+
+        return sendMessageBox
+
+    def setCloseButton(self):
+        MainActivity.MainActivity.startClientActivity(self.mainWindow)
